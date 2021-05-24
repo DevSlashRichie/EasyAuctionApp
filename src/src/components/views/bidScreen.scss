@@ -1,0 +1,187 @@
+* {
+  padding: 0;
+  margin: 0;
+
+  box-sizing: border-box;
+}
+
+.title {
+  margin-top: 3em;
+
+  span {
+    font-size: 20px;
+  }
+}
+
+.bid-screen {
+  width: 750px;
+  margin: 3em auto;
+
+  display: flex;
+
+  flex-direction: row;
+
+  .nft-image {
+    margin: 0 auto;
+    width: 400px;
+    img {
+      width: inherit;
+    }
+  }
+
+  .side {
+    .bid-info {
+      padding-left: 25px;
+      text-align: left;
+
+      & > span {
+        text-align: left;
+        font-size: 35px;
+        font-weight: bold;
+        margin-bottom: 30px;
+        display: block;
+      }
+
+      .bid-data {
+        display: flex;
+        flex-direction: column;
+
+        .text {
+          color: gray;
+        }
+
+        .amount {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+}
+
+.controllers {
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  margin: 0 auto 25px;
+
+  & > * {
+    margin-top: 10px;
+  }
+
+  input {
+    display: block;
+  }
+
+}
+
+.btn {
+  padding: 15px;
+  border: 2px solid black;
+  width: 300px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #dcdcdc;
+  }
+}
+
+input {
+  width: 300px;
+  padding: 15px;
+  border-radius: 5px;
+  outline: 0;
+  box-shadow: none;
+  border: 2px solid black;
+
+  font-size: 35px;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  &::-webkit-outer-spin-button, &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+}
+
+.bids {
+  .table {
+    margin: 1em auto 5em;
+    width: 30%;
+
+    .bid {
+      text-align: center;
+      background-color: #61dafb;
+
+      display: flex;
+      flex-direction: row;
+
+      justify-content: space-around;
+      padding: 5px;
+
+    }
+
+    .header {
+      background-color: red;
+    }
+
+  }
+}
+
+.last-data {
+
+  display: flex;
+  justify-content: space-between;
+  padding: 25px;
+
+  * > div {
+    padding: 10px 20px;
+  }
+
+  .last {
+
+    .black {
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .amount {
+      font-weight: bold;
+      font-size: 35px;
+      padding-top: 20px;
+      padding-bottom: 0;
+    }
+
+  }
+
+  .time {
+    border-left: 1px solid gray;
+
+    .title-timer {
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .timer {
+      display: flex;
+      flex-direction: row;
+
+      .value {
+        font-size: 35px;
+        font-weight: bold;
+      }
+
+      & > div {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+
+}
