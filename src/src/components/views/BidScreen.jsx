@@ -1,14 +1,109 @@
 import './bidScreen.scss'
 import {UserBox} from "../UserBox";
+import {supabase} from "../../logic/logic";
+import {useEffect, useState} from "react";
+
+const BID_AMOUNT = 100;
+const END_TIME_UNIX = 1624591612;
 
 export function BidScreen() {
+    const [lastBid, setLastBid] = useState(0);
+    const [minBid, setMinBid] = useState(BID_AMOUNT);
+    const [endTime, setEndTime] = useState([]);
+    const [bidText, setBidText] = useState("");
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+
+        const updateBid = (amount) => {
+            setLastBid(amount);
+            setMinBid(amount + BID_AMOUNT);
+        }
+
+        const fetchData = async () => {
+            let { data: Bids } = await supabase
+                .from('Bids')
+                .select('amount')
+                .limit(1)
+                .order("id", {
+                    ascending: false
+                });
+
+            if (Bids && Bids.length > 0) {
+                const lastRecord = Bids[0];
+                const foundLastBid = lastRecord.amount;
+                updateBid(foundLastBid);
+            }
+        }
+
+        setInterval(() => {
+            const times = converUnixToArray();
+            setEndTime(times);
+        }, 1000);
+
+        fetchData();
+
+        // Listener
+
+        supabase
+            .from('Bids')
+            .on('INSERT', payload => {
+                updateBid(payload.new.amount);
+            })
+            .subscribe()
+
+
+    }, []);
+
+    const converUnixToArray = () => {
+        const currentTime = new Date().getTime() / 1000;
+        const date = new Date((END_TIME_UNIX - currentTime) * 1000);
+
+        return [
+            date.getSeconds(),
+            date.getMinutes(),
+            date.getHours()
+        ]
+    }
+
+    const createBid = async () => {
+        const amount = bidText;
+        if (!amount || amount < minBid || !amount.match(/[0-9]+/)) {
+            setError("La puja debe ser de al menos: " + minBid);
+            return;
+        }
+
+        const { error } = await supabase.from('Bids')
+            .insert([
+                {
+                    bidder: supabase.auth.user().id,
+                    amount: amount
+                }
+            ]);
+
+        if (error) {
+            console.log(error);
+        }
+
+        setBidText("");
+    }
+
+    const handleBidChange = (event) => {
+        const amount = event.target.value;
+
+        if (amount) {
+            setBidText(amount);
+            setError("");
+        }
+
+    }
 
     return (
         <div className="bid-screen">
-            <UserBox />
+            <UserBox/>
 
             <div className="nft-image">
-                <img src="https://i0.mymetaverse.io/3,01637037d6" />
+                <img src="https://i0.mymetaverse.io/3,01637037d6" alt="NFT"/>
             </div>
 
             <div className="side">
@@ -17,13 +112,22 @@ export function BidScreen() {
                     <span>Colocar Puja</span>
                     <div className="bid-data">
                         <span className="text">Debe ser al menos</span>
-                        <span className="amount">$1000</span>
+                        <span className="amount">${minBid} MXN</span>
                     </div>
                 </div>
 
                 <div className="controllers">
-                    <input type="number" placeholder="0" aria-controls="hidden"/>
-                    <div className="btn">
+                    {
+                        error ?
+                        <div className="error">
+                            {error}
+                        </div> : []
+                    }
+                    <input type="number" placeholder="0" aria-controls="hidden"
+                           value={bidText}
+                           onChange={handleBidChange}
+                    />
+                    <div className={"btn"} onClick={createBid}>
                         Pujar
                     </div>
                 </div>
@@ -31,35 +135,33 @@ export function BidScreen() {
                 <div className="last-data">
 
                     <div className="last">
-                        <div className="black">Puja Acutal</div>
-                        <div className="amount">$1000</div>
+                        <div className="black">Última Puja</div>
+                        <div className="amount">${lastBid}</div>
                     </div>
 
                     <div className="time">
 
-                        <div className="title-timer">Subata termina en:</div>
+                        <div className="title-timer">Subasta termina en:</div>
 
                         <div className="timer">
                             <div>
-                                <span className="value">2</span>
-                                <span>Hours</span>
+                                <span className="value">{endTime[2]}</span>
+                                <span>Horas</span>
                             </div>
 
                             <div>
-                                <span className="value">2</span>
+                                <span className="value">{endTime[1]}</span>
                                 <span>Minutos</span>
                             </div>
 
                             <div>
-                                <span className="value">2</span>
+                                <span className="value">{endTime[0]}</span>
                                 <span>Segundos</span>
                             </div>
                         </div>
 
 
-
                     </div>
-
 
 
                 </div>
@@ -67,6 +169,6 @@ export function BidScreen() {
 
 
         </div>
-    )
+    );
 
 }
