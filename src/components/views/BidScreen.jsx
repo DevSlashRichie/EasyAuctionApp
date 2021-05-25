@@ -58,13 +58,15 @@ export function BidScreen() {
     }, []);
 
     const converUnixToArray = () => {
-        const currentTime = new Date().getTime() / 1000;
-        const date = new Date((END_TIME_UNIX - currentTime) * 1000);
+        const currentTime = new Date().getTime();
+        const date = new Date(END_TIME * 1000 - currentTime);
 
         return [
             date.getSeconds(),
             date.getMinutes(),
-            date.getHours()
+            date.getHours(),
+            date.getDay(),
+            date.getMonth()
         ]
     }
 
@@ -175,6 +177,14 @@ export function BidScreen() {
                         <div className="title-timer">Subasta termina en:</div>
 
                         <div className="timer">
+                            <div>
+                                <span className="value">{endTime[4]}</span>
+                                <span>Meses</span>
+                            </div>
+                            <div>
+                                <span className="value">{endTime[3]}</span>
+                                <span>Días</span>
+                            </div>
                             <div>
                                 <span className="value">{endTime[2]}</span>
                                 <span>Horas</span>
