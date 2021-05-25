@@ -1,9 +1,10 @@
 import './App.css';
 import {BidScreen} from "./components/views/BidScreen";
-import {supabase} from "./logic/logic";
+import {END_TIME, supabase} from "./logic/logic";
 import {useEffect, useState} from "react";
 import {LoginScreen} from "./components/LoginScreen";
 import {StyleRoot} from "radium";
+import {EndScreen} from "./components/EndScreen";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -25,6 +26,13 @@ function App() {
 
     }, [user]);
 
+    const isTimeFinished = () => {
+        const END_TIME_UNIX = END_TIME;
+        const currentTime = new Date().getTime() / 1000;
+        if (currentTime > END_TIME_UNIX)
+            return true;
+    }
+
   return (
     <div className="App">
       <div className="title">
@@ -33,6 +41,11 @@ function App() {
       </div>
 
         {
+
+            isTimeFinished() ?
+                <EndScreen />
+                :
+
             !user ?
                 <LoginScreen />
                 : <>

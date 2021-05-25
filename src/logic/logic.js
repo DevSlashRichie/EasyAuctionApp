@@ -12,3 +12,5 @@ export async function loginButton() {
 
     console.log(`User: ${user}`);
 }
+
+export const END_TIME = 1624683600;

@@ -1,12 +1,12 @@
 import './bidScreen.scss'
 import {UserBox} from "../UserBox";
-import {supabase} from "../../logic/logic";
+import {END_TIME, supabase} from "../../logic/logic";
 import {useEffect, useState} from "react";
 import {shake} from "react-animations";
 import Radium, {StyleRoot} from "radium";
 
 const BID_AMOUNT = 100;
-const END_TIME_UNIX = 1624683600;
+const END_TIME_UNIX = END_TIME;
 
 export function BidScreen() {
     const [lastBid, setLastBid] = useState(0);
