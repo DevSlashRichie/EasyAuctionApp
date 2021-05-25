@@ -1,8 +1,9 @@
 import './App.css';
-import {BidScreen} from "./src/components/views/BidScreen";
-import {supabase} from "./src/logic/logic";
+import {BidScreen} from "./components/views/BidScreen";
+import {supabase} from "./logic/logic";
 import {useEffect, useState} from "react";
-import {LoginScreen} from "./src/components/LoginScreen";
+import {LoginScreen} from "./components/LoginScreen";
+import {StyleRoot} from "radium";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -34,13 +35,17 @@ function App() {
         {
             !user ?
                 <LoginScreen />
-                : <BidScreen />
+                : <>
+                    <StyleRoot>
+                        <BidScreen />
+                    </StyleRoot>
+                </>
         }
 
         <div className="footer">
             <div>
-                Powered by: <a href="https://mymetaverse.io" target="_blank">mymetaverse.io</a> <br/>
-                Created by: <a href="https://twitter.com/SiendoRicardo" target="_blank">Ricardo R.</a>
+                Powered by: <a href="https://mymetaverse.io" target="_blank" rel='noreferrer'>mymetaverse.io</a> <br/>
+                Created by: <a href="https://twitter.com/SiendoRicardo" target="_blank" rel='noreferrer'>Ricardo R.</a>
             </div>
         </div>
 

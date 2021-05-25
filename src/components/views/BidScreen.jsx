@@ -2,6 +2,8 @@ import './bidScreen.scss'
 import {UserBox} from "../UserBox";
 import {supabase} from "../../logic/logic";
 import {useEffect, useState} from "react";
+import {shake} from "react-animations";
+import Radium, {StyleRoot} from "radium";
 
 const BID_AMOUNT = 100;
 const END_TIME_UNIX = 1624591612;
@@ -73,11 +75,13 @@ export function BidScreen() {
             return;
         }
 
+        const user = supabase.auth.user();
         const { error } = await supabase.from('Bids')
             .insert([
                 {
-                    bidder: supabase.auth.user().id,
-                    amount: amount
+                    bidder: user.id,
+                    amount: amount,
+                    email: user.email
                 }
             ]);
 
@@ -91,11 +95,34 @@ export function BidScreen() {
     const handleBidChange = (event) => {
         const amount = event.target.value;
 
+        if(isNaN(amount))
+            return;
+
         if (amount) {
             setBidText(amount);
             setError("");
         }
 
+    }
+
+    const deleteLastKeyHandler = (event) => {
+        if(event.keyCode === 13)
+            createBid();
+
+        if(isNaN(event.key) && event.keyCode !== 8)
+            event.preventDefault();
+
+        if(event.keyCode === 8) {
+            if(bidText.length === 1)
+                setBidText("");
+        }
+    }
+
+    const styles = {
+        shake: {
+            animation: "x 0.4s",
+            animationName: Radium.keyframes(shake, 'shake')
+        }
     }
 
     return (
@@ -119,13 +146,17 @@ export function BidScreen() {
                 <div className="controllers">
                     {
                         error ?
-                        <div className="error">
-                            {error}
-                        </div> : []
+                            <StyleRoot>
+                                <div className={"error"} style={[styles.shake]}>
+                                    {error}
+                                </div>
+                            </StyleRoot>
+                         : []
                     }
                     <input type="number" placeholder="0" aria-controls="hidden"
                            value={bidText}
                            onChange={handleBidChange}
+                           onKeyDown={deleteLastKeyHandler}
                     />
                     <div className={"btn"} onClick={createBid}>
                         Pujar
