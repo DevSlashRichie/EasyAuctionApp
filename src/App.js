@@ -26,6 +26,8 @@ function App() {
 
     }, [user]);
 
+    // -
+
     const isTimeFinished = () => {
         const END_TIME_UNIX = END_TIME;
         const currentTime = new Date().getTime() / 1000;
