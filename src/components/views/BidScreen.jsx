@@ -6,7 +6,7 @@ import {shake} from "react-animations";
 import Radium, {StyleRoot} from "radium";
 
 const BID_AMOUNT = 100;
-const END_TIME_UNIX = 1624591612;
+const END_TIME_UNIX = 1624683600;
 
 export function BidScreen() {
     const [lastBid, setLastBid] = useState(0);
