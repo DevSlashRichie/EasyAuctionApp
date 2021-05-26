@@ -59,7 +59,6 @@ export function BidScreen() {
 
     const converUnixToArray = () => {
         const currentTime = new Date().getTime();
-        const date = new Date((END_TIME_UNIX * 1000) - (currentTime));
         const delta = END_TIME_UNIX - (currentTime / 1000);
 
         return [
