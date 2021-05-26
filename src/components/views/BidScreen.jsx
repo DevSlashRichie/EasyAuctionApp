@@ -59,14 +59,14 @@ export function BidScreen() {
 
     const converUnixToArray = () => {
         const currentTime = new Date().getTime();
-        const date = new Date(END_TIME_UNIX * 1000 - currentTime);
+        const date = new Date((END_TIME_UNIX * 1000) - (currentTime));
 
         return [
-            date.getSeconds(),
-            date.getMinutes(),
-            date.getHours(),
-            date.getDay(),
-            date.getMonth()
+            date.getUTCSeconds(),
+            date.getUTCMinutes(),
+            date.getUTCDay(),
+            date.getUTCDay(),
+            date.getUTCMonth()
         ]
     }
 
